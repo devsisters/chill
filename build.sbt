@@ -19,15 +19,9 @@ def scalaVersionSpecificFolders(srcBaseDir: java.io.File, scalaVersion: String):
 
 val sharedSettings = Seq(
   organization := "com.twitter",
-  scalaVersion := "2.11.12",
-  crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.8"),
+  scalaVersion := "3.8.1",
+//  crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.8", "3.8.1"),
   scalacOptions ++= Seq("-unchecked", "-deprecation"),
-  scalacOptions ++= {
-    scalaVersion.value match {
-      case v if v.startsWith("2.11") => Seq("-Ywarn-unused", "-Ywarn-unused-import", "-target:jvm-1.8")
-      case _                         => Seq("-Ywarn-unused", "-release", "8")
-    }
-  },
   // Twitter Hadoop needs this, sorry 1.7 fans
   javacOptions ++= Seq("-target", "1.8", "-source", "1.8", "-Xlint:-options"),
   Test / fork := true,
@@ -50,9 +44,9 @@ val sharedSettings = Seq(
     "clojars".at("https://clojars.org/repo")
   ),
   libraryDependencies ++= Seq(
-    "org.scalacheck" %% "scalacheck" % "1.15.2" % "test",
-    "org.scalatest" %% "scalatest" % "3.2.15" % "test",
-    "org.scalatestplus" %% "scalatestplus-scalacheck" % "3.1.0.0-RC2" % "test",
+    "org.scalacheck" %% "scalacheck" % "1.19.0" % "test",
+    "org.scalatest" %% "scalatest" % "3.2.19" % "test",
+    "org.scalatestplus" %% "scalacheck-1-19" % "3.2.19.0" % "test",
     "com.esotericsoftware" % "kryo-shaded" % kryoVersion
   ),
   Test / parallelExecution := true,
@@ -205,7 +199,7 @@ lazy val chillAkka = module("akka")
 lazy val chillBijection = module("bijection")
   .settings(
     libraryDependencies ++= Seq(
-      "com.twitter" %% "bijection-core" % bijectionVersion
+      ("com.twitter" %% "bijection-core" % bijectionVersion).cross(CrossVersion.for3Use2_13)
     )
   )
   .dependsOn(chill % "test->test;compile->compile")
@@ -251,7 +245,7 @@ lazy val chillScrooge = module("scrooge")
   .settings(
     libraryDependencies ++= Seq(
       ("org.apache.thrift" % "libthrift" % "0.17.0").exclude("junit", "junit"),
-      "com.twitter" %% "scrooge-serializer" % scroogeVersion
+      ("com.twitter" %% "scrooge-serializer" % scroogeVersion).cross(CrossVersion.for3Use2_13)
     )
   )
   .dependsOn(chill % "test->test;compile->compile")
@@ -271,7 +265,7 @@ lazy val chillProtobuf = module("protobuf")
 lazy val chillAvro = module("avro")
   .settings(
     libraryDependencies ++= Seq(
-      "com.twitter" %% "bijection-avro" % bijectionVersion,
+      ("com.twitter" %% "bijection-avro" % bijectionVersion).cross(CrossVersion.for3Use2_13),
       "junit" % "junit" % "4.13.2" % "test"
     )
   )
@@ -280,7 +274,7 @@ lazy val chillAvro = module("avro")
 lazy val chillAlgebird = module("algebird")
   .settings(
     libraryDependencies ++= Seq(
-      "com.twitter" %% "algebird-core" % algebirdVersion
+      ("com.twitter" %% "algebird-core" % algebirdVersion).cross(CrossVersion.for3Use2_13)
     )
   )
   .dependsOn(chill)
