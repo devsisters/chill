@@ -18,6 +18,7 @@ def scalaVersionSpecificFolders(srcBaseDir: java.io.File, scalaVersion: String):
   }
 
 val sharedSettings = Seq(
+  version := "0.10.10",
   organization := "com.twitter",
   scalaVersion := "2.11.12",
   crossScalaVersions := Seq("2.11.12", "2.12.17", "2.13.8"),
