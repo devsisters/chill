@@ -197,7 +197,6 @@ final private[chill] class AllScalaRegistrar_0_9_2 extends IKryoRegistrar {
     }).forSubclass[Regex](new RegexSerializer)
       .forClass[ClassTag[Any]](new ClassTagSerializer[Any])
       .forSubclass[Manifest[Any]](new ManifestSerializer[Any])
-      .forSubclass[scala.Enumeration#Value](new EnumerationSerializer)
 
     // use the singleton serializer for boxed Unit
     val boxedUnit = scala.runtime.BoxedUnit.UNIT
